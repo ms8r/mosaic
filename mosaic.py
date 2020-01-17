@@ -5,7 +5,7 @@ from multiprocessing import Process, Queue, cpu_count
 
 # Change these 3 config parameters to suit your needs...
 TILE_SIZE      = 50		# height/width of mosaic tiles in pixels
-TILE_MATCH_RES = 5		# tile matching resolution (higher values give better fit but require more processing)
+TILE_MATCH_RES = 10		# tile matching resolution (higher values give better fit but require more processing)
 ENLARGEMENT    = 8		# the mosaic image will be this many times wider and taller than the original
 
 TILE_BLOCK_SIZE = TILE_SIZE / max(min(TILE_MATCH_RES, TILE_SIZE), 1)
@@ -68,7 +68,7 @@ class TargetImage:
 		large_img = img.resize((w, h), Image.ANTIALIAS)
 		w_diff = (w % TILE_SIZE)/2
 		h_diff = (h % TILE_SIZE)/2
-		
+
 		# if necessary, crop the image slightly so we use a whole number of tiles horizontally and vertically
 		if w_diff or h_diff:
 			large_img = large_img.crop((w_diff, h_diff, w - w_diff, h - h_diff))
@@ -183,7 +183,7 @@ def compose(original_img, tiles):
 	all_tile_data_large = [list(tile.getdata()) for tile in tiles_large]
 	all_tile_data_small = [list(tile.getdata()) for tile in tiles_small]
 
-	work_queue   = Queue(WORKER_COUNT)	
+	work_queue   = Queue(WORKER_COUNT)
 	result_queue = Queue()
 
 	try:
